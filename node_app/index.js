@@ -12,15 +12,23 @@ const dbConfig = {
   database: "appdb"
 };
 
-app.get("/", (req, res) => {
-  res.send("<h1>slop</h1>");
-  res.json({ message: "Node.js está rodando no Docker!" });
-});
-
-app.get("/users", async (req, res) => {
+app.get("/api/v1/cliente", async (req, res) => {
   try {
     const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute("SELECT * FROM users");
+    const [rows] = await connection.execute("SELECT * FROM clientes");
+    await connection.end();
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/v1/cliente/:id", async (req, res) => {
+  try {
+    const cliente = req.params.id;
+
+    const connection = await mysql.createConnection(dbConfig);
+    const [rows] = await connection.execute("SELECT * FROM clientes WHERE id = " + cliente);
     await connection.end();
     res.json(rows);
   } catch (err) {
