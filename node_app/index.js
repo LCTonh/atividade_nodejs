@@ -14,7 +14,7 @@ const dbConfig = {
 
 app.get("/api/v1/cliente", async (req, res) => {
   try {
-    const connection = await mysql.createConnection(dbConfig);
+    const connection = await mysql.createConnection(dbConfig)
     const [rows] = await connection.execute("SELECT * FROM clientes");
     await connection.end();
     res.json(rows);
@@ -26,9 +26,9 @@ app.get("/api/v1/cliente", async (req, res) => {
 app.get("/api/v1/cliente/:id", async (req, res) => {
   try {
     const cliente = req.params.id;
-
-    const connection = await mysql.createConnection(dbConfig);
-    const [rows] = await connection.execute("SELECT * FROM clientes WHERE id = " + cliente);
+    
+    const connection = await mysql.createConnection(dbConfig)
+    const [rows] = await connection.query('SELECT * FROM clientes WHERE id = ?', [cliente]);
     await connection.end();
     res.json(rows);
   } catch (err) {
